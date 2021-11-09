@@ -1,8 +1,8 @@
 from cell import Cell
-import random
+import random, arcade
 
 class Pathogen(Cell):
 
-    def __init__(self,color):
-        super().__init__(color)
+    def __init__(self, x, y):
+        super().__init__(x, y, arcade.color.ANDROID_GREEN)
     

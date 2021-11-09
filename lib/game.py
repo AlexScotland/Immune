@@ -34,12 +34,13 @@ class Sim(arcade.Window):
     
     def draw_all_cells(self):
         for cell in self.all_cells:
-            cell.spawn(cell.x,cell.y)
+            cell.move_direction()
+            cell.spawn()
 
     def start_infection(self):
-        num_of_infected = random.randint(0,10)
+        num_of_infected = random.randint(1,100)
         for number in range(0,num_of_infected):
-            print(number)
-            cur_pathogen  = Pathogen(arcade.color.ANDROID_GREEN)
-            cur_pathogen.spawn(random.randint(0,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT))
+            cur_pathogen  = Pathogen(random.randint(0,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT))
+            cur_pathogen.spawn()
             self.all_cells.append(cur_pathogen)
+
