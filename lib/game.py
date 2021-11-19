@@ -41,6 +41,8 @@ class Sim(arcade.Window):
         self.all_cells=[]
         self.START_TIME = datetime.now()
         self.TIMER_SECONDS = 10 / SIMULATION_SPEED
+        self.healthy_counter = 0
+        self.total_dead = 0
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -56,14 +58,22 @@ class Sim(arcade.Window):
         # Draw our Scene
         self.scene.draw()
         self.draw_all_cells()
-
         if has_time_passed(self.START_TIME,self.TIMER_SECONDS):
             for cell in self.all_cells:
                 if Pathogen in cell.__class__.__mro__:
                     self.send_in_backup()
                     self.START_TIME = datetime.now()
                     break
+        tmp_counter = 0
+        for cell in self.all_cells:
+            if CivilianCell in cell.__class__.__mro__:
+                tmp_counter +=1
+        
+        self.total_dead = self.healthy_counter - tmp_counter
+        display = f"{self.total_dead} / {self.healthy_counter}"
+        arcade.draw_text(str(display),10,20,arcade.color.GREEN,20,180,'left')
 
+        
 
         # Code to draw the screen goes here
     
@@ -131,3 +141,4 @@ class Sim(arcade.Window):
             joe_blow = CivilianCell(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), SIMULATION_SPEED)
             joe_blow.spawn()
             self.all_cells.append(joe_blow)
+            self.healthy_counter +=1
