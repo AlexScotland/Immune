@@ -1,22 +1,13 @@
 from cell import Cell
-from pathogen import Pathogen
-import random, arcade
+import arcade
+from helper_functions import *
 
-def collision_detection(x1, y1, x2, y2, r1, r2):
-    distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
-    radSumSq = (r1 + r2) * (r1 + r2)
-    if (distSq == radSumSq):
-        return True
-    elif (distSq > radSumSq):
-        return False
-    else:
-        return True
 class Macrophage(Cell):
 
-    def __init__(self, x, y, multiplier = 1):
-        super().__init__(x, y, arcade.color.WHITE, multiplier, 20)
+    def __init__(self, x, y, color=arcade.color.ALABAMA_CRIMSON, multiplier = 1, size=20):
+        super().__init__(x, y, color, multiplier, size)
         self.vision = self.size + 20
-        self.speed = .5 * multiplier
+        self.speed = .25 * multiplier
         self.hunting = False
     
     def spawn(self):
@@ -29,7 +20,7 @@ class Macrophage(Cell):
     def check_if_cell_can_see_cell(self,cell_list):
         for cell_index in range(len(cell_list)):
             cell = cell_list[cell_index]
-            if type(cell) is Macrophage:
+            if Macrophage in cell.__class__.__mro__:
                 continue
             if collision_detection(self.x + self.vision, self.y + self.vision, cell.x, cell.y, self.vision, cell.size):
                 # collision_detection(self.x + vision, self.y + vision, cell.x, cell.y, self.vision, cell.size):

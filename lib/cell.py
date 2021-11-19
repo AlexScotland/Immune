@@ -40,7 +40,7 @@ class Cell():
         self.current_direction = selected_direction
 
     def __set_size_of_cell(self):
-        return random.randint(0,10)
+        return random.randint(1,10)
 
     def spawn(self):
         arcade.draw_circle_filled(self.x, self.y, self.size, self.color)
