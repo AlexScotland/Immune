@@ -31,9 +31,13 @@ class Neutrophil(Macrophage):
         else: 
             return False
 
-    def check_collision_from_cell_in_net(self, pathogen_list):
-        for pathogen in pathogen_list:
-            if collision_detection(self.x, self.y, pathogen.x, pathogen.y, self.size, pathogen.size):
-                pathogen.speed = 0
+    def check_collision_from_cell_in_net(self, cell_list):
+        for cell in cell_list:
+            if collision_detection(self.x, self.y, cell.x, cell.y, self.size, cell.size):
+                if Macrophage in cell.__class__.__mro__:
+                    return False
+                else:
+                    cell.speed = 0
+        return True
     
 

@@ -1,16 +1,18 @@
-import arcade, random, time
+import arcade, random
+from datetime import *
 from pathogen import Pathogen
 from macrophage import Macrophage
 from neutrophil import Neutrophil
+from helper_functions import *
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Simulation"
-SIMULATION_SPEED = 1
+SIMULATION_SPEED = 4
 MAX_NUM_OF_MACROPHAGES = random.randint(1,5)
 MAX_NUM_OF_NEUTROPHILS = random.randint(1,3)
 MAX_NUM_OF_PATHOGENS = random.randint(0,500)
-TIMER_SECONDS = 60 / SIMULATION_SPEED
+
 
 def out_of_screen_calculator(cell_obj):
     cell = cell_obj
@@ -36,6 +38,8 @@ class Sim(arcade.Window):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
         self.scene = None
         self.all_cells=[]
+        self.START_TIME = datetime.now()
+        self.TIMER_SECONDS = 60 / SIMULATION_SPEED
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -50,6 +54,10 @@ class Sim(arcade.Window):
         # Draw our Scene
         self.scene.draw()
         self.draw_all_cells()
+
+        if has_time_passed(self.START_TIME,self.TIMER_SECONDS):
+            self.send_in_backup()
+            self.START_TIME = datetime.now()
         # Code to draw the screen goes here
     
     def draw_all_cells(self):
@@ -73,7 +81,9 @@ class Sim(arcade.Window):
                     if cell.check_for_self_destruct():
                         cell.convert_to_net()
                     if cell.converted_to_net:
-                        cell.check_collision_from_cell_in_net(self.all_cells)
+                        if cell.check_collision_from_cell_in_net(self.all_cells):
+                            self.all_cells.remove(cell)
+
             cell.spawn()
 
     def start_infection(self):
@@ -87,7 +97,7 @@ class Sim(arcade.Window):
         Function spawns Macrophage warriors
         """
         for number in range(1,5):
-            current_good_guy  = Macrophage(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), SIMULATION_SPEED, 20)
+            current_good_guy  = Macrophage(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), multiplier = SIMULATION_SPEED, size=20)
             current_good_guy.spawn()
             self.all_cells.append(current_good_guy)
     
