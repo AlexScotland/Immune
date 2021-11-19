@@ -11,7 +11,7 @@ def collision_detection(x1, y1, x2, y2, r1, r2):
         return False
     else:
         return True
-class Neutrophil(Cell):
+class Macrophage(Cell):
 
     def __init__(self, x, y, multiplier = 1):
         super().__init__(x, y, arcade.color.WHITE, multiplier, 10)
@@ -29,7 +29,7 @@ class Neutrophil(Cell):
     def check_if_cell_can_see_cell(self,cell_list):
         for cell_index in range(len(cell_list)):
             cell = cell_list[cell_index]
-            if type(cell) is Neutrophil:
+            if type(cell) is Macrophage:
                 continue
             if collision_detection(self.x + self.vision, self.y + self.vision, cell.x, cell.y, self.vision, cell.size):
                 # collision_detection(self.x + vision, self.y + vision, cell.x, cell.y, self.vision, cell.size):
