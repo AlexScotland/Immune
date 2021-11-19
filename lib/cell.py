@@ -4,9 +4,12 @@ class Cell():
     """
     main cell class
     """
-    def __init__(self,x, y, color, multiplier = 1):
+    def __init__(self,x, y, color, multiplier = 1, size = None):
         self.x, self.y = x, y
-        self.size = self.__set_size_of_cell()
+        if not size:
+            self.size = self.__set_size_of_cell()
+        else:
+            self.size = size
         self.color = color
         self.speed = multiplier # pixel
         self.directions = None

@@ -1,5 +1,6 @@
 import arcade, random
 from pathogen import Pathogen
+from neutrophil import Neutrophil
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -30,11 +31,13 @@ class Sim(arcade.Window):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
         self.scene = None
         self.all_cells=[]
+        self.all_neutrophils=[]
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         self.scene = arcade.Scene()
+        self.generate_good_guys()
         self.start_infection()
 
     def on_draw(self):
@@ -47,16 +50,32 @@ class Sim(arcade.Window):
     
     def draw_all_cells(self):
         for cell in self.all_cells:
-            cell.move_direction()
-            wall_hit = out_of_screen_calculator(cell)
-            if wall_hit:
-                cell.move_opposite_direction_of_current_direction(wall_hit)
+            ## Moves the pathogen throughout randomly
+            if type(cell) is Pathogen:
+                cell.move_direction()
+                wall_hit = out_of_screen_calculator(cell)
+                if wall_hit:
+                    cell.move_opposite_direction_of_current_direction(wall_hit)
+            ## Moves the Neutrophil
+            if type(cell) is Neutrophil:
+                cell.check_if_cell_can_see_cell(self.all_cells)
+                if not cell.hunting:
+                    ## Neutrophil acts normal cause he aint a hunter yet
+                    cell.move_direction()
+                    wall_hit = out_of_screen_calculator(cell)
+                    if wall_hit:
+                        cell.move_opposite_direction_of_current_direction(wall_hit)
             cell.spawn()
 
     def start_infection(self):
-        num_of_infected = random.randint(1,100)
+        num_of_infected = random.randint(1,20)
         for number in range(0,num_of_infected):
-            cur_pathogen  = Pathogen(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), SIMULATION_SPEED)
+            cur_pathogen  = Pathogen(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), SIMULATION_SPEED)
             cur_pathogen.spawn()
             self.all_cells.append(cur_pathogen)
 
+    def generate_good_guys(self):
+        for number in range(1,2):
+            current_good_guy  = Neutrophil(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), SIMULATION_SPEED)
+            current_good_guy.spawn()
+            self.all_cells.append(current_good_guy)
