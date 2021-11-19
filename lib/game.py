@@ -1,6 +1,6 @@
 import arcade, random
 from pathogen import Pathogen
-from Macrophage import Macrophage
+from macrophage import Macrophage
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650

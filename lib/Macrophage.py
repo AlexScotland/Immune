@@ -14,9 +14,9 @@ def collision_detection(x1, y1, x2, y2, r1, r2):
 class Macrophage(Cell):
 
     def __init__(self, x, y, multiplier = 1):
-        super().__init__(x, y, arcade.color.WHITE, multiplier, 10)
+        super().__init__(x, y, arcade.color.WHITE, multiplier, 20)
         self.vision = self.size + 20
-        self.speed = 1.5 * multiplier
+        self.speed = .5 * multiplier
         self.hunting = False
     
     def spawn(self):
