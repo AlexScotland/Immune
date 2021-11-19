@@ -35,7 +35,7 @@ class Macrophage(Cell):
         return False
     
     def hunt_down_cell(self, enemy_cell):
-        if not collision_detection(self.x, self.y, enemy_cell.x, enemy_cell.y, self.size, enemy_cell.size):
+        if not collision_detection(self.x+10, self.y+10, enemy_cell.x, enemy_cell.y, self.size, enemy_cell.size):
             if self.x > enemy_cell.x:
                 self.x -= self.speed
             else:

@@ -2,6 +2,8 @@ import arcade, random
 from helper_functions import *
 from macrophage import Macrophage
 from civilian import CivilianCell
+from pathogen import Pathogen
+
 class Neutrophil(Macrophage):
     def __init__(self, x, y, multiplier = 1, size=5):
         super().__init__(x, y, arcade.color.AMARANTH_PURPLE, multiplier, size)
@@ -20,8 +22,8 @@ class Neutrophil(Macrophage):
             cell = cell_list[cell_index]
             if Macrophage in cell.__class__.__mro__ or CivilianCell in cell.__class__.__mro__:
                 continue
-            if collision_detection(self.x + self.vision, self.y + self.vision, cell.x, cell.y, self.vision, cell.size) and self.converted_to_net:
-                # collision_detection(self.x + vision, self.y + vision, cell.x, cell.y, self.vision, cell.size):
+
+            if collision_detection(self.x + self.vision, self.y + self.vision, cell.x, cell.y, self.vision, cell.size) and not self.converted_to_net:
                 self.hunting = True
                 if self.hunt_down_cell(cell):
                     del cell_list[cell_index]
