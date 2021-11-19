@@ -4,7 +4,7 @@ from helper_functions import *
 
 class Macrophage(Cell):
 
-    def __init__(self, x, y, color=arcade.color.WHITE, multiplier = 1, size=20):
+    def __init__(self, x, y, color=arcade.color.AFRICAN_VIOLET, multiplier = 1, size=20):
         super().__init__(x, y, color, multiplier, size)
         self.vision = self.size + 20
         self.speed = .5 * multiplier
