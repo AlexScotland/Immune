@@ -3,6 +3,7 @@ from datetime import *
 from pathogen import Pathogen
 from macrophage import Macrophage
 from neutrophil import Neutrophil
+from civilian import CivilianCell
 from helper_functions import *
 # Constants
 SCREEN_WIDTH = 1000
@@ -10,20 +11,20 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Simulation"
 SIMULATION_SPEED = 4
 MAX_NUM_OF_MACROPHAGES = random.randint(1,5)
-MAX_NUM_OF_NEUTROPHILS = random.randint(1,3)
-MAX_NUM_OF_PATHOGENS = random.randint(0,500)
+MAX_NUM_OF_NEUTROPHILS = random.randint(1,10)
+MAX_NUM_OF_PATHOGENS = random.randint(1,20)
+MAX_NUM_OF_CIVILIANS = random.randint(1,300)
 
 
 def out_of_screen_calculator(cell_obj):
     cell = cell_obj
     if cell.x < 0:
         return "left"
-        return True
-    elif cell.x > SCREEN_WIDTH:
+    elif cell.x > SCREEN_WIDTH-10:
         return "right"
     elif cell.y < 0:
         return "top"
-    elif cell.y > SCREEN_HEIGHT:
+    elif cell.y > SCREEN_HEIGHT-10:
         return "bottom"
     return False
 
@@ -39,12 +40,13 @@ class Sim(arcade.Window):
         self.scene = None
         self.all_cells=[]
         self.START_TIME = datetime.now()
-        self.TIMER_SECONDS = 60 / SIMULATION_SPEED
+        self.TIMER_SECONDS = 10 / SIMULATION_SPEED
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         self.scene = arcade.Scene()
+        self.spawn_innocent()
         self.generate_good_guys()
         self.start_infection()
 
@@ -56,14 +58,28 @@ class Sim(arcade.Window):
         self.draw_all_cells()
 
         if has_time_passed(self.START_TIME,self.TIMER_SECONDS):
-            self.send_in_backup()
-            self.START_TIME = datetime.now()
+            for cell in self.all_cells:
+                if Pathogen in cell.__class__.__mro__:
+                    self.send_in_backup()
+                    self.START_TIME = datetime.now()
+                    break
+
+
         # Code to draw the screen goes here
     
     def draw_all_cells(self):
         for cell in self.all_cells:
+            if cell.x > SCREEN_WIDTH+100 or cell.x < -100 or cell.y > SCREEN_HEIGHT+100 or cell.y < -100:
+                cell.x = 100
+                cell.y = 100
             ## Moves the pathogen throughout randomly
-            if type(cell) is Pathogen:
+            if CivilianCell in cell.__class__.__mro__:
+                cell.move_direction()
+                wall_hit = out_of_screen_calculator(cell)
+                if wall_hit:
+                    cell.move_opposite_direction_of_current_direction(wall_hit)
+            if Pathogen in cell.__class__.__mro__:
+                cell.check_if_cell_can_see_cell(self.all_cells)
                 cell.move_direction()
                 wall_hit = out_of_screen_calculator(cell)
                 if wall_hit:
@@ -87,8 +103,8 @@ class Sim(arcade.Window):
             cell.spawn()
 
     def start_infection(self):
-        for number in range(1,MAX_NUM_OF_PATHOGENS):
-            cur_pathogen  = Pathogen(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), SIMULATION_SPEED)
+        for number in range(0,MAX_NUM_OF_PATHOGENS):
+            cur_pathogen  = Pathogen(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), multiplier = SIMULATION_SPEED, size = random.randint(0,5))
             cur_pathogen.spawn()
             self.all_cells.append(cur_pathogen)
 
@@ -96,8 +112,8 @@ class Sim(arcade.Window):
         """
         Function spawns Macrophage warriors
         """
-        for number in range(1,5):
-            current_good_guy  = Macrophage(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), multiplier = SIMULATION_SPEED, size=20)
+        for number in range(0,MAX_NUM_OF_MACROPHAGES):
+            current_good_guy  = Macrophage(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), multiplier = SIMULATION_SPEED, size=20)
             current_good_guy.spawn()
             self.all_cells.append(current_good_guy)
     
@@ -105,7 +121,13 @@ class Sim(arcade.Window):
         """
         Function spawns backup (Neutrophils)
         """
-        for number in range(1,5):
-            current_good_guy  = Neutrophil(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), SIMULATION_SPEED, 5)
+        for number in range(0,MAX_NUM_OF_NEUTROPHILS):
+            current_good_guy = Neutrophil(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), SIMULATION_SPEED, size=  5)
             current_good_guy.spawn()
             self.all_cells.append(current_good_guy)
+
+    def spawn_innocent(self):
+        for number in range(0,MAX_NUM_OF_CIVILIANS):
+            joe_blow = CivilianCell(random.randint(1,SCREEN_WIDTH),random.randint(1,SCREEN_HEIGHT), SIMULATION_SPEED)
+            joe_blow.spawn()
+            self.all_cells.append(joe_blow)

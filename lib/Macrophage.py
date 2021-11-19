@@ -1,6 +1,8 @@
 from cell import Cell
 import arcade
 from helper_functions import *
+from civilian import CivilianCell
+from pathogen import Pathogen
 
 class Macrophage(Cell):
 
@@ -20,7 +22,7 @@ class Macrophage(Cell):
     def check_if_cell_can_see_cell(self,cell_list):
         for cell_index in range(len(cell_list)):
             cell = cell_list[cell_index]
-            if Macrophage in cell.__class__.__mro__:
+            if Macrophage in cell.__class__.__mro__ or CivilianCell in cell.__class__.__mro__:
                 continue
             if collision_detection(self.x + self.vision, self.y + self.vision, cell.x, cell.y, self.vision, cell.size):
                 # collision_detection(self.x + vision, self.y + vision, cell.x, cell.y, self.vision, cell.size):
