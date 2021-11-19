@@ -4,7 +4,20 @@ from pathogen import Pathogen
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Simulation"
+SIMULATION_SPEED = 4
 
+def out_of_screen_calculator(cell_obj):
+    cell = cell_obj
+    if cell.x < 0:
+        return "left"
+        return True
+    elif cell.x > SCREEN_WIDTH:
+        return "right"
+    elif cell.y < 0:
+        return "top"
+    elif cell.y > SCREEN_HEIGHT:
+        return "bottom"
+    return False
 
 class Sim(arcade.Window):
     """
@@ -35,12 +48,15 @@ class Sim(arcade.Window):
     def draw_all_cells(self):
         for cell in self.all_cells:
             cell.move_direction()
+            wall_hit = out_of_screen_calculator(cell)
+            if wall_hit:
+                cell.move_opposite_direction_of_current_direction(wall_hit)
             cell.spawn()
 
     def start_infection(self):
         num_of_infected = random.randint(1,100)
         for number in range(0,num_of_infected):
-            cur_pathogen  = Pathogen(random.randint(0,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT))
+            cur_pathogen  = Pathogen(random.randint(1,SCREEN_WIDTH),random.randint(0,SCREEN_HEIGHT), SIMULATION_SPEED)
             cur_pathogen.spawn()
             self.all_cells.append(cur_pathogen)
 
