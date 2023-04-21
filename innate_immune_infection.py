@@ -4,7 +4,7 @@ Proj: Immune
 
 """
 
-from game import Sim
+from innate_infection.game import Sim
 import arcade
 
 def start():
