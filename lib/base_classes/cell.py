@@ -47,9 +47,12 @@ class Cell():
 
     def move_direction(self):
         self.__init_directions()
+        if random.randint(0,10) == 3:
+            self.current_direction = self.determine_direction()
         direction_key = self.directions[self.current_direction]
         self.x = direction_key['direction_math'][0]
         self.y = direction_key['direction_math'][1]
+
     
     def __init_directions(self):
             self.directions = {

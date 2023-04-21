@@ -3,7 +3,7 @@ Developer: Alex Scotland
 Proj: Immune - Spread of Viral Infections
 """
 
-from lib.game import Sim
+from viral_infection.game import Sim
 import arcade
 
 def start():
