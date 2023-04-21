@@ -1,8 +1,8 @@
-from cell import Cell
+from lib.base_classes.cell import Cell
 import arcade
-from helper_functions import *
-from civilian import CivilianCell
-from pathogen import Pathogen
+from lib.helper_functions import *
+from lib.civilian import CivilianCell
+from lib.pathogen import Pathogen
 
 class Macrophage(Cell):
 

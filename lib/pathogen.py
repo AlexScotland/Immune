@@ -1,7 +1,7 @@
-from cell import Cell
-from civilian import CivilianCell
+from lib.base_classes.cell import Cell
+from lib.civilian import CivilianCell
 import random, arcade
-from helper_functions import *
+from lib.helper_functions import *
 
 class Pathogen(Cell):
 

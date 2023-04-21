@@ -1,6 +1,6 @@
-from cell import Cell
+from lib.base_classes.cell import Cell
 import arcade
-from helper_functions import *
+from lib.helper_functions import *
 
 class CivilianCell(Cell):
     def __init__(self, x, y, multiplier = 1, color=arcade.color.WHITE):

@@ -1,8 +1,8 @@
 import arcade, random
-from helper_functions import *
-from macrophage import Macrophage
-from civilian import CivilianCell
-from pathogen import Pathogen
+from lib.helper_functions import *
+from lib.macrophage import Macrophage
+from lib.civilian import CivilianCell
+from lib.pathogen import Pathogen
 
 class Neutrophil(Macrophage):
     def __init__(self, x, y, multiplier = 1, size=5):

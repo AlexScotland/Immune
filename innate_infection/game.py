@@ -1,10 +1,10 @@
 import arcade, random
 from datetime import *
-from pathogen import Pathogen
-from macrophage import Macrophage
-from neutrophil import Neutrophil
-from civilian import CivilianCell
-from helper_functions import *
+from lib.pathogen import Pathogen
+from lib.macrophage import Macrophage
+from lib.neutrophil import Neutrophil
+from lib.civilian import CivilianCell
+from lib.helper_functions import *
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
